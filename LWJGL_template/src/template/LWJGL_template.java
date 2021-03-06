@@ -34,6 +34,7 @@ public class LWJGL_template {
 
 	static int verticesVBO;
 	static int indicesVBO;
+	static int verticesCount;
 	static int vertexShader;
 	static int fragmentShader;
 	static int renderProgram;
@@ -93,6 +94,8 @@ public class LWJGL_template {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesVBO);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, cubeIndices, GL_STATIC_DRAW);
 
+		verticesCount = cubeIndices.length;
+
 		startTime = System.currentTimeMillis();
 		lastTime = startTime;
 	}
@@ -109,7 +112,8 @@ public class LWJGL_template {
 
 		glMatrixMode(GL_MODELVIEW);
 		FloatBuffer modelviewMatrix = FloatBuffer.allocate(16);
-		lookAt(new Vector3f(0f, SIZE * 1.8f, SIZE * 3.6f), new Vector3f(0f, 0f, 0f), new Vector3f(0f, 1f, 0f)).store(modelviewMatrix);
+		lookAt(new Vector3f(0f, SIZE * 1.8f, SIZE * 3.6f), new Vector3f(0f, 0f, 0f), new Vector3f(0f, 1f, 0f))
+				.store(modelviewMatrix);
 		glLoadMatrixf(modelviewMatrix.array());
 		glRotatef(angle, 0f, 1f, 0f);
 
@@ -123,7 +127,7 @@ public class LWJGL_template {
 		glVertexPointer(3, GL_FLOAT, 0, 0);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesVBO);
 		glEnableClientState(GL_VERTEX_ARRAY);
-		glDrawElements(GL_TRIANGLES, 24, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, verticesCount, GL_UNSIGNED_INT, 0);
 		glDisableClientState(GL_VERTEX_ARRAY);
 
 		glUseProgram(0);
